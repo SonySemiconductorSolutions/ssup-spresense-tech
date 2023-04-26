@@ -10,4 +10,5 @@
 - [W5500-Ether (有線ネットワーク拡張ボード for Spresense)](https://crane-elec.co.jp/products/oem/vol-20/)
 
 ## サンプルプログラム
-- [UDPを送信](udpTimeoutReset/)
+- HTTPリクエストを使用してスピードを測定(webClient)
+- [UDPを送信](udpTimeoutReset)
