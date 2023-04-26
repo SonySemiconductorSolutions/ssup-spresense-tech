@@ -1,0 +1,214 @@
+diff --git a/SPRESENSE-WISUN-EVK-701/bp35c0-j11.cpp b/SPRESENSE-WISUN-EVK-701/bp35c0-j11.cpp
+index c8d2ee1..c3fc9c4 100644
+--- a/SPRESENSE-WISUN-EVK-701/bp35c0-j11.cpp
++++ b/SPRESENSE-WISUN-EVK-701/bp35c0-j11.cpp
+@@ -1,17 +1,14 @@
+ /********************************************************************************
+   bp35c0-j11.cpp
+   Copyright (c) 2019 ROHM Co.,Ltd.
+-
+   Permission is hereby granted, free of charge, to any person obtaining a copy
+   of this software and associated documentation files (the "Software"), to deal
+   in the Software without restriction, including without limitation the rights
+   to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+   copies of the Software, and to permit persons to whom the Software is
+   furnished to do so, subject to the following conditions:
+-
+   The above copyright notice and this permission notice shall be included in
+   all copies or substantial portions of the Software.
+-
+   THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+   IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+   FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+@@ -27,9 +24,10 @@ unsigned const char uni_req[4] = {0xD0 , 0xEA , 0x83 , 0xFC};
+ unsigned const char uni_res[4] = {0xD0 , 0xF9 , 0xEE , 0x5D};
+ 
+ unsigned const char ini_data[4] = {0x03 , 0x00 , 0x05 , 0x00};       // エンドデバイス/Sleep 非対応/922.9MHz/20mW出力
+-unsigned const char pair_id[8] = {0x00 , 0x1D , 0x12 , 0x91 , 0x00 , 0x00 , 0x05 , 0xA7};   // 接続先MACアドレス
+-unsigned const char mac_adr[16] = {0xFE , 0x80 , 0x00 , 0x00 , 0x00 , 0x00 , 0x00 , 0x00 , 0x02 , 0x1D , 0x12 , 0x91 , 0x00 , 0x00 , 0x05 , 0xE7}; // 接続先IPv6アドレス
+-unsigned const char my_port[2] = { 0x01 , 0x23 };     // オープンするUDPポート
++unsigned char pair_id[8] = {0xFF , 0xFF , 0xFF , 0xFF , 0xFF , 0xFF , 0xFF , 0xFF};   // 接続先MACアドレス
++// unsigned const char pair_id[8] = {0x00 , 0x1D , 0x12 , 0x91 , 0x00 , 0x00 , 0x05 , 0xB1};   // 接続先MACアドレス
++unsigned char ip_adr[16] = {0xFE , 0x80 , 0x00 , 0x00 , 0x00 , 0x00 , 0x00 , 0x00 , 0xFF , 0xFF , 0xFF , 0xFF , 0xFF , 0xFF , 0xFF , 0xFF}; // 接続先IPv6アドレス
++unsigned const char my_port[2] = { 0x0E , 0x1A };     // オープンするUDPポート
+ unsigned const char dist_port[2] = { 0x0E , 0x1A };   // 送信先UDPポート
+ unsigned const char password[16] = { '1' , '1' , '1' , '1' , '2', '2' , '2' , '2' , '3' , '3' , '3' , '3' , '4' , '4' , '4' , '4' };    // PANA認証時のパスワード
+ unsigned const char radiodata[4] = { 'T' , 'E' , 'S' , 'T' };         // 送信データ
+@@ -96,6 +94,7 @@ boolean BP35C0J11::wait_msg(void)
+     rcvdata[cnt] = Serial2.read();
+ #ifdef DEBUG
+     Serial.print(rcvdata[cnt] , HEX);
++    Serial.print(" ");
+ #endif
+     cnt++;
+     if (cnt >= 128) {
+@@ -103,6 +102,9 @@ boolean BP35C0J11::wait_msg(void)
+       return FALSE;
+     }
+   }
++  cnt=0;
++  Serial.println("");
++
+   if (rcvdata[0] == uni_res[0] && rcvdata[1] == uni_res[1] &&
+       rcvdata[2] == uni_res[2] && rcvdata[3] == uni_res[3]) {     // RESPONSE/NORTIFICATION
+     switch (rcvdata[4] << 8 | rcvdata[5]) {
+@@ -133,6 +135,13 @@ boolean BP35C0J11::wait_msg(void)
+       case (RES_HAN):
+         if (rcvdata[12] == 0x01) {
+           Serial.println("HAN Act Success");
++          Serial.print("PANC: ");
++          for(cnt=0; cnt<MAC_ADDR_LEN; cnt++) {
++            pair_id[cnt]  = rcvdata[16+cnt];
++            ip_adr[cnt+8] = rcvdata[16+cnt];
++          }
++          debugmsg(8, pair_id);
++          ip_adr[8] = ip_adr[8] ^ 0x02;
+         } else {
+           Serial.println("HAN Act Error");
+           return FALSE;
+@@ -178,6 +187,9 @@ boolean BP35C0J11::wait_msg(void)
+           return FALSE;
+         }
+         break;
++      case (NORT_RCV_DAT):
++        Serial.println("UDP recv Success");
++        break;
+       case (0x2FFF):
+         Serial.println("checksum error");
+         return FALSE;
+@@ -213,6 +225,7 @@ boolean BP35C0J11::cmd_send(unsigned short cmd) {
+   unsigned char data[128] = {0};
+ 
+   unsigned char send_data[128] = {0} ;
++  boolean rc = TRUE;
+   unsigned char cnt = 0 ;
+ 
+   switch (cmd) {
+@@ -327,10 +340,10 @@ boolean BP35C0J11::cmd_send(unsigned short cmd) {
+       msg_length = (unsigned short)(4 + dat_length);
+       hdr_chksum += CMD_UDPSEND + msg_length;
+       for (cnt = 0 ; cnt < 16 ; cnt++ ) {
+-        data[cnt] = mac_adr[cnt] ;
++        data[cnt] = ip_adr[cnt] ;
+       }
+       data[16] = my_port[0] ;
+-      data[17] = my_port[1] ;          // 送信元UDPポート　：0x0123
++      data[17] = my_port[1] ;          // 送信元UDPポート　：0x0E1A
+       data[18] = dist_port[0] ;
+       data[19] = dist_port[1] ;        // 送信先UDPポート：0x0E1A
+       data[20] = (unsigned char)(send_dat_size >> 8);
+@@ -351,8 +364,7 @@ boolean BP35C0J11::cmd_send(unsigned short cmd) {
+ 
+       break;
+   }
+-
+-  return TRUE;
++  return rc;
+ }
+ 
+ /********************************************************************************
+@@ -408,6 +420,3 @@ void BP35C0J11::debugmsg(unsigned short datalength , unsigned char* psend_data)
+   }
+   Serial.println("");
+ }
+-
+-
+-
+diff --git a/SPRESENSE-WISUN-EVK-701/bp35c0-j11.h b/SPRESENSE-WISUN-EVK-701/bp35c0-j11.h
+index 9ad0b3a..cd822c7 100644
+--- a/SPRESENSE-WISUN-EVK-701/bp35c0-j11.h
++++ b/SPRESENSE-WISUN-EVK-701/bp35c0-j11.h
+@@ -29,6 +29,8 @@
+ #define CMD_HDR_LEN  ((unsigned char)8)
+ #define UNI_CODE_LEN ((unsigned char)4)
+ 
++#define MAC_ADDR_LEN ((unsigned char)8)
++
+ #define CMD_RESET    (0x00D9)
+ #define CMD_INI      (0x005F)
+ #define CMD_HAN      (0x000A)
+@@ -50,6 +52,8 @@
+ #define NORT_SCAN    (0x4051)
+ #define RES_PORTOPEN (0x2005)
+ #define NORT_PANA    (0x6028)
++#define NORT_RCV_DAT (0x6018)
++
+ 
+ #define TIMEOUT      ((unsigned short)10000)
+ 
+@@ -80,4 +84,3 @@ class BP35C0J11
+ 		void static debugmsg(unsigned short datalength , unsigned char *psend_data);
+ };
+ #endif    //_BP35C0J11_H_
+-
+diff --git a/SPRESENSE-WISUN-EVK-701/examples/SPRESENSE-WISUN-EVK-701/SPRESENSE-WISUN-EVK-701.ino b/SPRESENSE-WISUN-EVK-701/examples/SPRESENSE-WISUN-EVK-701/SPRESENSE-WISUN-EVK-701.ino
+index de79310..af53ebd 100644
+--- a/SPRESENSE-WISUN-EVK-701/examples/SPRESENSE-WISUN-EVK-701/SPRESENSE-WISUN-EVK-701.ino
++++ b/SPRESENSE-WISUN-EVK-701/examples/SPRESENSE-WISUN-EVK-701/SPRESENSE-WISUN-EVK-701.ino
+@@ -1,6 +1,6 @@
+ /*
+-  SPRESENSE-WISUN-EVK-701
+- Copyright (c) 2019 ROHM Co.,Ltd.
++  SPRESENSE-WISUN-EVK-701-DEV2
++ Copyright (c) 2020 ROHM Co.,Ltd.
+ 
+  Permission is hereby granted, free of charge, to any person obtaining a copy
+  of this software and associated documentation files (the "Software"), to deal
+@@ -88,6 +88,7 @@ void loop() {
+       rc = bp35c0j11.wait_msg();
+       if(rc == TRUE){
+         state = 5;
++        delay(1000);
+       }
+       break;
+     case(5): // HAN PANA act
+@@ -96,29 +97,30 @@ void loop() {
+       if(rc == TRUE){
+         rc = bp35c0j11.wait_msg();
+         if(rc == TRUE){
+-            state = 7;
++            state = 6;
+         }
+       }
+       break;
+-    case(6): // rcv mode change
+-      rc = bp35c0j11.cmd_send(CMD_CON_SET);
+-      rc = bp35c0j11.wait_msg();
+-      if(rc == TRUE){
+-        state = 7;
+-      }
+-      break;
+-    case(7): // my_port open
++    // case(6): // rcv mode change
++    //   rc = bp35c0j11.cmd_send(CMD_CON_SET);
++    //   rc = bp35c0j11.wait_msg();
++    //   if(rc == TRUE){
++    //     state = 7;
++    //   }
++    //   break;
++    case(6): // my_port open
+       rc = bp35c0j11.cmd_send(CMD_PORTOPEN);
+       rc = bp35c0j11.wait_msg();
+       if(rc == TRUE){
+-        state = 8;
++        state = 7;
+       }
+       break;
+-    case(8): // UDP send
+-      rc = bp35c0j11.cmd_send(CMD_UDPSEND);
+-      rc = bp35c0j11.wait_msg();
++    case(7): // UDP send and recv
++      rc = bp35c0j11.wait_msg(); // wait UDP from PANC 
+       if(rc == TRUE){
+-        delay(5000);
++        delay(500);
++        rc = bp35c0j11.cmd_send(CMD_UDPSEND); // send UDP to PANC
++        rc = bp35c0j11.wait_msg();
+       }
+       break;
+     default:  // error 
+@@ -131,4 +133,3 @@ void loop() {
+ 
+ 
+ }
+-

@@ -1,0 +1,294 @@
+diff --git a/SPRESENSE-WISUN-EVK-701/bp35c0-j11.cpp b/SPRESENSE-WISUN-EVK-701/bp35c0-j11.cpp
+index c8d2ee1..a8577f1 100644
+--- a/SPRESENSE-WISUN-EVK-701/bp35c0-j11.cpp
++++ b/SPRESENSE-WISUN-EVK-701/bp35c0-j11.cpp
+@@ -26,10 +26,13 @@
+ unsigned const char uni_req[4] = {0xD0 , 0xEA , 0x83 , 0xFC};
+ unsigned const char uni_res[4] = {0xD0 , 0xF9 , 0xEE , 0x5D};
+ 
+-unsigned const char ini_data[4] = {0x03 , 0x00 , 0x05 , 0x00};       // エンドデバイス/Sleep 非対応/922.9MHz/20mW出力
+-unsigned const char pair_id[8] = {0x00 , 0x1D , 0x12 , 0x91 , 0x00 , 0x00 , 0x05 , 0xA7};   // 接続先MACアドレス
+-unsigned const char mac_adr[16] = {0xFE , 0x80 , 0x00 , 0x00 , 0x00 , 0x00 , 0x00 , 0x00 , 0x02 , 0x1D , 0x12 , 0x91 , 0x00 , 0x00 , 0x05 , 0xE7}; // 接続先IPv6アドレス
+-unsigned const char my_port[2] = { 0x01 , 0x23 };     // オープンするUDPポート
++unsigned const char ini_data[4] = {0x01 , 0x00 , 0x05 , 0x00};       // PAN Coordinator /Sleep 非対応/922.9MHz/20mW出力
++// unsigned char pair_id[8] = {0xFF , 0xFF , 0xFF , 0xFF , 0xFF , 0xFF , 0xFF , 0xFF};   // 接続先MACアドレス
++unsigned char pan_id[2] = {0x56 , 0x78};   // PAN ID
++unsigned char end_dev_adr[8] = {0xFF , 0xFF , 0xFF , 0xFF , 0xFF , 0xFF , 0xFF , 0xFF}; // 接続先MACアドレス
++// unsigned const char pair_id[8] = {0x00 , 0x1D , 0x12 , 0x91 , 0x00 , 0x00 , 0x05 , 0xB1};   // 接続先MACアドレス
++unsigned char ip_adr[16] = {0xFE , 0x80 , 0x00 , 0x00 , 0x00 , 0x00 , 0x00 , 0x00 , 0xFF , 0xFF , 0xFF , 0xFF , 0xFF , 0xFF , 0xFF , 0xFF}; // 接続先IPv6アドレス
++unsigned const char my_port[2] = { 0x0E , 0x1A };     // オープンするUDPポート
+ unsigned const char dist_port[2] = { 0x0E , 0x1A };   // 送信先UDPポート
+ unsigned const char password[16] = { '1' , '1' , '1' , '1' , '2', '2' , '2' , '2' , '3' , '3' , '3' , '3' , '4' , '4' , '4' , '4' };    // PANA認証時のパスワード
+ unsigned const char radiodata[4] = { 'T' , 'E' , 'S' , 'T' };         // 送信データ
+@@ -96,6 +99,7 @@ boolean BP35C0J11::wait_msg(void)
+     rcvdata[cnt] = Serial2.read();
+ #ifdef DEBUG
+     Serial.print(rcvdata[cnt] , HEX);
++    Serial.print(" ");
+ #endif
+     cnt++;
+     if (cnt >= 128) {
+@@ -103,6 +107,9 @@ boolean BP35C0J11::wait_msg(void)
+       return FALSE;
+     }
+   }
++  cnt=0;
++  Serial.println("");
++
+   if (rcvdata[0] == uni_res[0] && rcvdata[1] == uni_res[1] &&
+       rcvdata[2] == uni_res[2] && rcvdata[3] == uni_res[3]) {     // RESPONSE/NORTIFICATION
+     switch (rcvdata[4] << 8 | rcvdata[5]) {
+@@ -150,7 +157,7 @@ boolean BP35C0J11::wait_msg(void)
+         if (rcvdata[12] == 0x01) {
+           Serial.println("PANA Connect Success");
+         } else {
+-          Serial.println("PANA Connecgt Error");
++          Serial.println("PANA Connect Error");
+           return FALSE;
+         }
+         break;
+@@ -162,6 +169,26 @@ boolean BP35C0J11::wait_msg(void)
+           return FALSE;
+         }
+         break;
++      case (NORT_CON_STAT_CHANG):
++        if (rcvdata[12] == 0x01) {
++          Serial.println("MAC connect Success");
++          Serial.print("END DEVICE: ");
++          for(cnt=0; cnt<MAC_ADDR_LEN; cnt++) {
++            end_dev_adr[cnt] = rcvdata[13+cnt];
++            ip_adr[cnt+8]    = rcvdata[13+cnt];
++          }
++          debugmsg(8, end_dev_adr);
++          ip_adr[8] = ip_adr[8] ^ 0x02;         
++        } else if (rcvdata[12] == 0x02) {
++          Serial.println("PANA authentication Success");
++        } else if (rcvdata[12] == 0x03) {
++          Serial.println("MAC disconnect");
++        } else if (rcvdata[12] == 0x04) {
++          Serial.println("PANA disconnect");
++        } else {
++          return FALSE;
++        }
++        break;
+       case (RES_PORTOPEN):
+         if (rcvdata[12] == 0x01) {
+           Serial.println("UDP port open Success");
+@@ -178,6 +205,9 @@ boolean BP35C0J11::wait_msg(void)
+           return FALSE;
+         }
+         break;
++      case (NORT_RCV_DAT):
++        Serial.println("UDP recv Success");
++        break;
+       case (0x2FFF):
+         Serial.println("checksum error");
+         return FALSE;
+@@ -213,6 +243,7 @@ boolean BP35C0J11::cmd_send(unsigned short cmd) {
+   unsigned char data[128] = {0};
+ 
+   unsigned char send_data[128] = {0} ;
++  boolean rc = TRUE;
+   unsigned char cnt = 0 ;
+ 
+   switch (cmd) {
+@@ -245,11 +276,15 @@ boolean BP35C0J11::cmd_send(unsigned short cmd) {
+ #endif
+       break;
+     case (CMD_PANA_SET):
+-      dat_length = (unsigned short)16 ;
++      dat_length = (unsigned short)24 ;
+       msg_length = (unsigned short)(4 + dat_length);
+       hdr_chksum += CMD_PANA_SET + msg_length;
+-      for (cnt = 0 ; cnt < dat_length ; cnt++ ) {
+-        data[cnt] = password[cnt] ;
++
++      for (cnt = 0 ; cnt < (MAC_ADDR_LEN) ; cnt++ ) {
++        data[cnt] = end_dev_adr[cnt];
++      }
++      for ( ; cnt < dat_length ; cnt++ ) {
++        data[cnt] = password[cnt-(MAC_ADDR_LEN)];
+       }
+       for (cnt = 0 ; cnt < dat_length ; cnt++) {
+         dat_chksum += data[cnt];
+@@ -264,11 +299,11 @@ boolean BP35C0J11::cmd_send(unsigned short cmd) {
+     case (CMD_SCAN):
+       break;
+     case (CMD_HAN):
+-      dat_length = (unsigned short)8 ;
++      dat_length = (unsigned short)2;
+       msg_length = (unsigned short)(4 + dat_length);
+       hdr_chksum += CMD_HAN + msg_length;
+       for (cnt = 0 ; cnt < dat_length ; cnt++ ) {
+-        data[cnt] = pair_id[cnt] ;
++        data[cnt] = pan_id[cnt] ;
+       }
+       for (cnt = 0 ; cnt < dat_length ; cnt++) {
+         dat_chksum += data[cnt];
+@@ -296,7 +331,7 @@ boolean BP35C0J11::cmd_send(unsigned short cmd) {
+       dat_length = 1;
+       msg_length = (unsigned short)(4 + dat_length);
+       hdr_chksum += CMD_CON_SET + msg_length;
+-      data[0] = 0x02 ;
++      data[0] = 0x01; // initial connection mode
+       dat_chksum = data[0] ;
+       msg_create(CMD_CON_SET , msg_length , hdr_chksum , dat_chksum, data , send_data );
+       Serial2.write(send_data, msg_length + CMD_HDR_LEN);
+@@ -327,10 +362,10 @@ boolean BP35C0J11::cmd_send(unsigned short cmd) {
+       msg_length = (unsigned short)(4 + dat_length);
+       hdr_chksum += CMD_UDPSEND + msg_length;
+       for (cnt = 0 ; cnt < 16 ; cnt++ ) {
+-        data[cnt] = mac_adr[cnt] ;
++        data[cnt] = ip_adr[cnt] ;
+       }
+       data[16] = my_port[0] ;
+-      data[17] = my_port[1] ;          // 送信元UDPポート　：0x0123
++      data[17] = my_port[1] ;          // 送信元UDPポート　：0x0E1A
+       data[18] = dist_port[0] ;
+       data[19] = dist_port[1] ;        // 送信先UDPポート：0x0E1A
+       data[20] = (unsigned char)(send_dat_size >> 8);
+@@ -351,8 +386,7 @@ boolean BP35C0J11::cmd_send(unsigned short cmd) {
+ 
+       break;
+   }
+-
+-  return TRUE;
++  return rc;
+ }
+ 
+ /********************************************************************************
+diff --git a/SPRESENSE-WISUN-EVK-701/bp35c0-j11.h b/SPRESENSE-WISUN-EVK-701/bp35c0-j11.h
+index 9ad0b3a..8c837aa 100644
+--- a/SPRESENSE-WISUN-EVK-701/bp35c0-j11.h
++++ b/SPRESENSE-WISUN-EVK-701/bp35c0-j11.h
+@@ -29,6 +29,8 @@
+ #define CMD_HDR_LEN  ((unsigned char)8)
+ #define UNI_CODE_LEN ((unsigned char)4)
+ 
++#define MAC_ADDR_LEN ((unsigned char)8)
++
+ #define CMD_RESET    (0x00D9)
+ #define CMD_INI      (0x005F)
+ #define CMD_HAN      (0x000A)
+@@ -50,6 +52,8 @@
+ #define NORT_SCAN    (0x4051)
+ #define RES_PORTOPEN (0x2005)
+ #define NORT_PANA    (0x6028)
++#define NORT_CON_STAT_CHANG  (0x601A)
++#define NORT_RCV_DAT (0x6018)
+ 
+ #define TIMEOUT      ((unsigned short)10000)
+ 
+diff --git a/SPRESENSE-WISUN-EVK-701/examples/SPRESENSE-WISUN-EVK-701/SPRESENSE-WISUN-EVK-701.ino b/SPRESENSE-WISUN-EVK-701/examples/SPRESENSE-WISUN-EVK-701/SPRESENSE-WISUN-EVK-701.ino
+index de79310..8f1ce1f 100644
+--- a/SPRESENSE-WISUN-EVK-701/examples/SPRESENSE-WISUN-EVK-701/SPRESENSE-WISUN-EVK-701.ino
++++ b/SPRESENSE-WISUN-EVK-701/examples/SPRESENSE-WISUN-EVK-701/SPRESENSE-WISUN-EVK-701.ino
+@@ -1,6 +1,6 @@
+ /*
+-  SPRESENSE-WISUN-EVK-701
+- Copyright (c) 2019 ROHM Co.,Ltd.
++  SPRESENSE-WISUN-EVK-701-PANC2
++ Copyright (c) 2020 ROHM Co.,Ltd.
+ 
+  Permission is hereby granted, free of charge, to any person obtaining a copy
+  of this software and associated documentation files (the "Software"), to deal
+@@ -66,61 +66,69 @@ void loop() {
+         state = 2;
+       }
+       break;
+-    case(2): // HAN PANA setting
+-      rc = bp35c0j11.cmd_send(CMD_PANA_SET);
++    case(2): //  HAN act
++      rc = bp35c0j11.cmd_send(CMD_HAN);
+       rc = bp35c0j11.wait_msg();
+       if(rc == TRUE){
+-        state = 4;
++        state = 3;
+       }
+       break;
+-    case(3): // active scan
+-      rc = bp35c0j11.cmd_send(CMD_SCAN);
++    // case(3): // active scan
++    //   rc = bp35c0j11.cmd_send(CMD_SCAN);
++    //   rc = bp35c0j11.wait_msg();
++    //   if(rc == TRUE){
++    //     rc = bp35c0j11.wait_msg();
++    //     if(rc == TRUE){
++    //       state = 4;
++    //     }
++    //   }
++    //   break;
++    case(3): // my_port open
++      rc = bp35c0j11.cmd_send(CMD_PORTOPEN);
+       rc = bp35c0j11.wait_msg();
+       if(rc == TRUE){
+-        rc = bp35c0j11.wait_msg();
+-        if(rc == TRUE){
+-          state = 4;
+-        }
++        state = 4;
+       }
+       break;
+-    case(4): //  HAN act
+-      rc = bp35c0j11.cmd_send(CMD_HAN);
+-      rc = bp35c0j11.wait_msg();
++    case(4): // recv mode change
++      rc = bp35c0j11.cmd_send(CMD_CON_SET);
++      rc = bp35c0j11.wait_msg(); // RES_CON_SET
++      rc = bp35c0j11.wait_msg(); // NORT_CON_STAT_CHANG MAC connect Success -> save end device address
+       if(rc == TRUE){
+         state = 5;
+       }
+       break;
+-    case(5): // HAN PANA act
+-      rc = bp35c0j11.cmd_send(CMD_PANA);
++    case(5): // HAN PANA setting
++      rc = bp35c0j11.cmd_send(CMD_PANA_SET);
+       rc = bp35c0j11.wait_msg();
+       if(rc == TRUE){
+-        rc = bp35c0j11.wait_msg();
+-        if(rc == TRUE){
+-            state = 7;
+-        }
++        state = 6;
+       }
+       break;
+-    case(6): // rcv mode change
+-      rc = bp35c0j11.cmd_send(CMD_CON_SET);
+-      rc = bp35c0j11.wait_msg();
++    case(6): // HAN PANA act
++      rc = bp35c0j11.cmd_send(CMD_PANA);
++      rc = bp35c0j11.wait_msg(); // RES_PANA
++      rc = bp35c0j11.wait_msg(); // NORT_CON_STAT_CHANG PANA auth. success
+       if(rc == TRUE){
+         state = 7;
+       }
+       break;
+-    case(7): // my_port open
+-      rc = bp35c0j11.cmd_send(CMD_PORTOPEN);
+-      rc = bp35c0j11.wait_msg();
+-      if(rc == TRUE){
+-        state = 8;
+-      }
+-      break;
+-    case(8): // UDP send
++    case(7): // UDP send
+       rc = bp35c0j11.cmd_send(CMD_UDPSEND);
+-      rc = bp35c0j11.wait_msg();
++      rc = bp35c0j11.wait_msg(); // RES_UDPSEND
++      rc = bp35c0j11.wait_msg(); // NORT_RCV_DAT recv data from end device
+       if(rc == TRUE){
+         delay(5000);
+       }
+       break;
++    case(9): // wait
++      while (1) {
++        rc = bp35c0j11.wait_msg();
++        if(rc == TRUE){
++          delay(1000);
++        }
++      }
++      break;
+     default:  // error 
+         state = 0 ;
+       break;
