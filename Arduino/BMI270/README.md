@@ -14,4 +14,5 @@
 - [BMI270-Sensor-API](https://github.com/TomonobuHayakawa/BMI270-Sensor-API)
 
 ## サンプルプログラム
+- [3軸加速度や3軸ジャイロのデータを取得](BMI270)
 - [BMI160からBMI270へ移植](BMI160_transplant_to_BMI270_1202)

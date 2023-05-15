@@ -64,7 +64,7 @@ Spresense Arudinoで使用できるセンサーやアドオンボードのため
 
 |アドオンボード|ライブラリ|サンプルプログラム|資料|
 |----|----|----|----|
-| [加速度・ジャイロセンサー(BMI270)](Arduino/BMI270) | [BMI270-Sensor-API](https://github.com/TomonobuHayakawa/BMI270-Sensor-API) ※1|[BMI160からBMI270へ移植](Arduino/BMI270/BMI160_transplant_to_BMI270_1202) |  [Datasheet](https://www.bosch-sensortec.com/media/boschsensortec/downloads/datasheets/bst-bmi270-ds000.pdf)|
+| [加速度・ジャイロセンサー(BMI270)](Arduino/BMI270) | [BMI270-Sensor-API](https://github.com/TomonobuHayakawa/BMI270-Sensor-API) ※1|[3軸加速度や3軸ジャイロのデータを取得](Arduino/BMI270/BMI270)<br/>[BMI160からBMI270へ移植](Arduino/BMI270/BMI160_transplant_to_BMI270_1202) |  [Datasheet](https://www.bosch-sensortec.com/media/boschsensortec/downloads/datasheets/bst-bmi270-ds000.pdf)|
 | [超音波センサー(MB7389-100)](Arduino/MB7389-100) | N/A |[距離データの取得](Arduino/MB7389-100/mb7389) |[MB7389 HRXL-MaxSonar-WRMT](https://maxbotix.com/products/mb7389)<br/>[HRXL-Maxsonar-WR Datasheet](https://maxbotix.com/pages/hrxl-maxsonar-wr-datasheet)<br/>[MB7389 x Arduino Tutorial](https://maxbotix.com/blogs/blog/mb7389-x-arduino-tutorial-with-code-examples)|
 | [HDRカメラ(CXD5602PWBCAM2W)](Arduino/CXD5602PWBCAM2W) | N/A | [画像を保存](Arduino/CXD5602PWBCAM2W/isx019)<br/> [FPSを測定](Arduino/CXD5602PWBCAM2W/cal_fps)|[HDRカメラボードの主な仕様](https://developer.sony.com/ja/develop/spresense/specifications) |
 | [ToFセンサー(MM-S50MV)](Arduino/MM-S50MV) |[MM-S50MV](https://github.com/TomonobuHayakawa/Spresense-Playground/tree/master/libraries/MM-S50MV) ※2 |[1D、3Dの距離と照度データの取得](Arduino/MM-S50MV/measure) |[Laser Class 1 ToFセンサーボード(MM-S50MV)](https://www.sunhayato.co.jp/material2/ett09/item_1187)|
