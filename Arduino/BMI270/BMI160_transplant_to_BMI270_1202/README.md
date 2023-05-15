@@ -10,8 +10,8 @@ BMI270センサーから3軸加速度や3軸ジャイロのデータを取得し
 
 ### 開発環境
   - PC: Ubuntu 18.04 または Windows 11
-  - Arduino IDE v1.8.13
-  - Spresense Arduino v2.6.0
+  - Arduino IDE v1.8.13/v2.1.0
+  - Spresense Arduino v2.6.0/v3.0.0
 
 ### 使用デバイス
 - Spresense Main Board

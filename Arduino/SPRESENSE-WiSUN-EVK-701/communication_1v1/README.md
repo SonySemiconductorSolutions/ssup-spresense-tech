@@ -8,9 +8,9 @@
 
 ## 動作確認したときの環境
 ### 開発環境
-- PC: Ubuntu 18.04
-- Arduino IDE:v1.8.13
-- Spresense Arduino:v2.6.0
+- PC: Ubuntu 18.04 または Windows 11
+- Arduino IDE:v1.8.13/v2.1.0
+- Spresense Arduino:v2.6.0/v3.0.0
 
 ### 使用デバイス
 - Spresense Main Board(２つ)
