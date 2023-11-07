@@ -31,7 +31,7 @@ Time_appClass *time_app;
 WifiClient_appClass *wifiClient_app;
 uint32_t byteCount = 0;
 ATCMD_RESP_E resp;
-const uint32_t BUFF_SIZE = 1024*20;
+const uint32_t BUFF_SIZE = 1500;
 byte buffer[BUFF_SIZE];
 
 void parse_httpresponse(char *message)
@@ -81,9 +81,8 @@ ATCMD_RESP_E getData(uint32_t* size)
 
   while(1){
     if( Get_GPIO37Status() ){
-      *size += len;
       resp = wifiClient_app->available(buffer, &len);
-      
+      *size += len;
       if( ATCMD_RESP_OK == resp ){
         
         /* AT+HTTPSEND command is done */

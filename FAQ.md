@@ -10,6 +10,18 @@
 
 [Spresenseメインボード](https://developer.sony.com/develop/spresense/docs/introduction_ja.html#_spresense_%E3%83%A1%E3%82%A4%E3%83%B3%E3%83%9C%E3%83%BC%E3%83%89)より
 
+## 拡張ボード
+
+### ピンレイアウト
+
+![](images/overview_hardware_extboard_signal.jpg)
+
+## LTE拡張ボード
+
+### ピンレイアウト
+
+![](images/overview_hardware_lte_extboard_signal.png)
+
 ## GitHubのリポジトリからファイルをダウンロードする方法
 
 ### ZIPファイルとしてダウンロードする方法
@@ -64,6 +76,22 @@ $ cd ssup-spresense
 $ git archive HEAD:Arduino/MM-S50MV -o MM-S50MV.zip
 ```
 
+## SDカード
+
+### SDカードを挿入しても認識しない
+
+SDカードがうまく動作ときは下記の可能性があります。
+
+1. メインボードと拡張ボードのコネクタが半差しになってうまく接続されていない
+2. SDカードが認識できないフォーマットでフォーマットされている。
+
+(1)	については、一度、メインボードを上から押しこんでみてください。表面上はうまく接続
+されているように見えますが、接続がうまくいっていなことがあります。
+
+(2)	については、SDカードがFAT32でフォーマットされているかご確認ください。
+
+他の要因の可能性もありますが、まずは、上記2点についてご確認をお願いいたします。
+
 ## [カメラボード(CXD5602PWBCAM1)](https://developer.sony.com/develop/spresense/docs/introduction_ja.html#_spresense_%E3%82%AB%E3%83%A1%E3%83%A9%E3%83%9C%E3%83%BC%E3%83%89)
 
 ### フレームレートを教えてほしい。
@@ -82,7 +110,7 @@ theCamera.begin(2,
 ```
 その他、画像サイズや画像フォーマットを変更した際のフレームレートについては、パラメータを変更して試してみてください。
 
-### カメラで撮影した画像を30fps以上でSDカードに記録したい。
+### カメラで撮影したVGA画像を30fps以上でSDカードに記録したい。
 
 SDカード上の同一ディレクトリの画像ファイル数が増えてくるとフレームレートの低下が発生し30fpsでは保存できなくなります。これを回避するために、以下の2つの方法を試してみたところ、試した範囲ではほぼ30fpsのフレームレートで保存することが出来ましたのでご紹介しておきます。
 
@@ -102,6 +130,10 @@ SDカード上の同一ディレクトリの画像ファイル数が増えてく
 [AviLibrary_Arduino](https://github.com/YoshinoTaro/AviLibrary_Arduino)
 
 もし、必要であれば、ffmpeg等を用いて後からPC上で一枚毎JPEGファイルに切り出すのは可能かと思います。
+
+### カメラで撮影したHD画像を30fps以上でネットワークを介して送信したい。
+
+Spresense本体に通信のAddonボードを接続した際、データ通信で使用しているSPIの最大レートが13Mbpsとなります。このため、SPIの最大レートに近いスピードが出せる有線LANを使用してもHD画像を30fpsの送信することは出来ません。
 
 ## [HDRカメラボード(CXD5602PWBCAM2W)](https://developer.sony.com/develop/spresense/docs/introduction_ja.html#_spresense_hdr_%E3%82%AB%E3%83%A1%E3%83%A9%E3%83%9C%E3%83%BC%E3%83%89)
 
@@ -135,6 +167,17 @@ HDRカメラボードはオンチップの複数フレームデジタル重畳�
 ### Spresense SDKで使えますか？
 THOUSANDIY-005で使用しているESP-WROOM-02はESP8266EXを搭載を搭載していますが、Spresense SDKは現在ESP8266に対応していないためSpresense SDKでの使用はできません。
 Arduinoから使用した場合のみ使用可能となります。
+
+## [WiFiアドオンボード(iS110B)](https://idy-design.com/product/is110b.html)
+
+### 無線LANのアクセスポイントとの接続が出来ない
+
+無線LANのアクセスポイントとの接続が出来ず、Association Failsなどのエラーが発生するケースとしてはいくつかが考えられます。
+
+1. Spresenseとアドオン基板の接触が良くない。このときは、Spresenseとアドオンボードを強めに押さえて接続できないか試してみてください。
+2. AP_SSIDの値が使用したい無線LANのアクセスポイントと異なっている。このときは、無線LANのアクセスポイントのSSIDと異なっていないか確かめてみてください。
+3. PASSPHRASEの値が使用したい無線LANのアクセスポイントと異なっている。このときは、無線LANのアクセスポイントのPASSPHRASEと異なっていないか確かめてみてください。
+4. まれにボードを挿しこんだ時の接触が悪い時があるようです。手で押さえていると動作するか確かめてみてください。
 
 ## [ELTRES](https://www.sony-semicon.com/ja/eltres/index.html)
 
@@ -242,4 +285,42 @@ void func()
   MP.Send(0, &a);
 }
 ```
+
 のようにローカル変数を指定すると、func()を抜けた後、ローカル変数aが使用しているメモリは解放されてしまうため、MP.Recv()で受信したアドレスは既に解放されていることが多いです。アドレス渡しで使用する変数には、グローバル変数やヒープなどのメモリを使用してください。
+
+### MP通信の受信バッファの段数を変更したい。
+
+MP通信は8段の受信バッファを持っていますが、Arduinoが提供しているAPIで受信バッファの段数を変更できません。
+
+## GPIO割込み
+
+### APP GPIOで6本目の設定ができない
+
+APP GPIOは最大6本まで使用できますが、SDカードの抜き差し検出用に1本使用するため、拡張ボードを使用する際には5本しか使用できません。
+
+[attachInterrupt()](https://developer.sony.com/spresense/development-guides/arduino_developer_guide_ja.html#_attachinterrupt)
+
+## 2台のSpresense間で通信を行いたい
+
+### ピンの関係で通常のシリアルやWiFiなどが使用できない
+
+Arduinoでは、[Software Serial Library](https://developer.sony.com/spresense/development-guides/arduino_developer_guide_ja.html#_software_serial_%E3%83%A9%E3%82%A4%E3%83%96%E3%83%A9%E3%83%AA)が提供されています。Software Serialが使用できないか検討してみてください。
+
+## 各I/Oの最大通信速度
+
+|I/O |最大通信速度 |
+|----|----|
+|SPI5(メインボード)| 13Mbps(Tx & Rx mode) |
+|SPI4(拡張ボード) | 39Mbps(Tx mode), 9.750Mbps(Tx & Rx mode) |
+|SPI(LTE拡張ボード)| 6.5Mbps |
+|SDIO | 21MB/s |
+|UART| 1.8432Mbps |
+|I2C|400kbps|
+
+SPIについては、メインボードおよび拡張ボードのどちらもTx & Rx modeではデータレートがおよそ10Mbps前後となっており、通信チップの性能に関わらず、10Mbps辺りが通信速度の上限となりますのでご注意ください。
+
+## 外部サイトのIPアドレスを調べる方法
+
+いろいろな方法がありますが、Google Admin Toolboxが提供しているサービスを使用するとWebブラウザからOS非依存で調べることができます。
+
+- [Dig (DNSルックアップ)](https://toolbox.googleapps.com/apps/dig/)

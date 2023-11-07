@@ -14,6 +14,9 @@ Samsung SemiconductorのKLMAG1JETD-B041(eMMC 5.1).を使用しています。
 ## サンプルプログラム
 - [camera_apitest サンプルプログラム](camera_apitest)
 - [nuttx_shell サンプルプログラム](nuttx_shell/)
+- [read_speed サンプルプログラム](./performance_measurement/read_speed/)
+- [write_fps_jpg サンプルプログラム](./performance_measurement/write_fps_jpg/)
+- [write_speed サンプルプログラム](./performance_measurement/write_speed/)
 - [player_playlist_hires サンプルプログラム](player_playlist_hires/)
 - [recorder_wav_192k サンプルプログラム](recorder_wav_192k/)
 - [UsbMsc サンプルプログラム](UsbMsc)

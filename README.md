@@ -13,13 +13,14 @@
 Spresenseについては[公式ドキュメント](https://developer.sony.com/ja/develop/spresense/)をご覧ください。また不明点が出てきた時には[公式FAQ](https://developer.sony.com/develop/spresense/docs/faq_ja.html)、[SSUP版FAQ](FAQ.md)、[stackoverflow](https://ja.stackoverflow.com/questions/tagged/spresense)などをご覧ください。
 
 - [Spresenseについて](https://developer.sony.com/develop/spresense/docs/introduction_ja.html)
+- [Spresenseドキュメント](https://developer.sony.com/spresense/development-guides/home_ja.html)
 - [Spresense Arduinoリリースノート](https://developer.sony.com/develop/spresense/docs/release_arduino_ja.html)
 - [Spresense SDKリリースノート](https://developer.sony.com/develop/spresense/docs/release_sdk_ja.html)
 
 ## 2.トピックス
 
-- [Sensing Solutionアイデアソン・ハッカソン 2022](https://sensing-solution-hackathon.sonyged.com/hc/ja)
-- [2022年 SPRESENSE(TM)活用コンテスト](https://elchika.com/promotion/spresense2022)
+- [Sensing Solutionアイデアソン・ハッカソン](https://sensing-solution-hackathon.sonyged.com/hc/ja)
+- [2023年 SPRESENSE(TM)活用コンテスト](https://elchika.com/promotion/spresense2023/)
 - [spresense Advent Calendar 2022](https://qiita.com/advent-calendar/2022/spresense)
 - [spresense Advent Calendar 2021](https://qiita.com/advent-calendar/2021/spresense)
 - [Daion Watch - MB専攻が実現する“未来の音楽体験”とは？](https://www.daion.ac.jp/muse/daion-watch/dmt2022/)
@@ -29,10 +30,6 @@ Spresenseについては[公式ドキュメント](https://developer.sony.com/ja
 - [stackoverflow.com (spresense)](https://ja.stackoverflow.com/questions/tagged/spresense)
 - [protopedia.net (spresense)](https://protopedia.net/keyword?word=spresense)
 - [aps-web.jp (spresense)](https://www.aps-web.jp/?s=spresense)
-
-<img src="images/spresense.jpg" width="480">
-
-[大阪音楽大学 Daion Music Tech 2022](https://www.daion.ac.jp/muse/daion-watch/dmt2022/)より
 
 ## 3.Spresense Arduino
 
@@ -48,6 +45,16 @@ Spresense Arduinoを使用する開発では[Arudino IDE](https://www.arduino.cc
 [![](https://img.youtube.com/vi/2AqhIPod4Kc/0.jpg)](https://www.youtube.com/playlist?list=PLzgPwCLYLGPOau4b4_2NPjKUVa1l1OhK3)
 [![](https://img.youtube.com/vi/QKpWPucmsmU/0.jpg)](https://www.youtube.com/c/NeuralNetworkConsole)
 
+#### 通信
+
+- [LTEとWiFiの使い方](https://youtu.be/OIxqreg50F0)
+- [BLEとLPWAの使い方/簡単な可視化について](https://youtu.be/dB5cx5DMROM)
+
+
+#### micro-ROS
+- [micro-ROSではじめるSLAM & Navigation(Day1)](https://youtu.be/F1k5qjHCixA)
+- [micro-ROSではじめるSLAM & Navigation(Day2)](https://youtu.be/hV6a1Kq9bfU)
+
 ### 3.2 書籍
 
 太田義則さん著のSpresense Arudinoの開発に関する書籍がありますのでよろしければこちらもご確認ください。
@@ -60,24 +67,36 @@ Spresense Arduinoを使用する開発では[Arudino IDE](https://www.arduino.cc
 
 ### 3.3 サンプルプログラムと参考情報
 
-Spresense Arudinoで使用できるセンサーやアドオンボードのためのサンプルプログラムと参考資料です。
+#### 3.3.1 アドオンボード
 
-|アドオンボード|ライブラリ|サンプルプログラム|資料|
+Spresense Arudinoで使用できるセンサーや通信アドオンボードを使用したサンプルプログラムと参考資料です。
+
+|アドオンボード|型番|ライブラリ|サンプルプログラム|
 |----|----|----|----|
-| [加速度・ジャイロセンサー(BMI270)](Arduino/BMI270) | [BMI270-Sensor-API](https://github.com/TomonobuHayakawa/BMI270-Sensor-API) ※1|[3軸加速度や3軸ジャイロのデータを取得](Arduino/BMI270/BMI270)<br/>[BMI160からBMI270へ移植](Arduino/BMI270/BMI160_transplant_to_BMI270_1202) |  [Datasheet](https://www.bosch-sensortec.com/media/boschsensortec/downloads/datasheets/bst-bmi270-ds000.pdf)|
-| [超音波センサー(MB7389-100)](Arduino/MB7389-100) | N/A |[距離データの取得](Arduino/MB7389-100/mb7389) |[MB7389 HRXL-MaxSonar-WRMT](https://maxbotix.com/products/mb7389)<br/>[HRXL-Maxsonar-WR Datasheet](https://maxbotix.com/pages/hrxl-maxsonar-wr-datasheet)<br/>[MB7389 x Arduino Tutorial](https://maxbotix.com/blogs/blog/mb7389-x-arduino-tutorial-with-code-examples)|
-| [HDRカメラ(CXD5602PWBCAM2W)](Arduino/CXD5602PWBCAM2W) | N/A | [画像を保存](Arduino/CXD5602PWBCAM2W/isx019)<br/> [FPSを測定](Arduino/CXD5602PWBCAM2W/cal_fps)|[HDRカメラボードの主な仕様](https://developer.sony.com/ja/develop/spresense/specifications) |
-| [ToFセンサー(MM-S50MV)](Arduino/MM-S50MV) |[MM-S50MV](https://github.com/TomonobuHayakawa/Spresense-Playground/tree/master/libraries/MM-S50MV) ※2 |[1D、3Dの距離と照度データの取得](Arduino/MM-S50MV/measure) |[Laser Class 1 ToFセンサーボード(MM-S50MV)](https://www.sunhayato.co.jp/material2/ett09/item_1187)|
-| [ELTRES(CEBB-CXM1501GR-02)](Arduino/CEBB-CXM1501GR-02) | [こちら](https://www.cresco-dt.co.jp/service/iot/iot-poc/eltres/)へ登録が必要 |N/A|[ELTRESについて](https://www.sony-semicon.com/ja/eltres/index.html) |
-| [WiFi iS110B(GS2200)](Arduino/iS110B) |[GS2200-WiFi](https://github.com/TomonobuHayakawa/GS2200-WiFi) ※1 | [HTTPリクエストを使用してスピードを測定](Arduino/iS110B/WebClient) |[SPRESENSE Wi-Fi Add-onボード iS110B](https://idy-design.com/product/is110b.html)<br/>[GS2200 MQTT](https://github.com/TomonobuHayakawa/GS2200-WiFi/blob/master/Documents/GS2200_MQTT-001.pdf)|
-| [WiFi THOUSANDIY-005(ESP8266)](Arduino/THOUSANDIY-005) |[ITEADLIB_Arduino_WeeESP8266](https://github.com/kamtom480/ITEADLIB_Arduino_WeeESP8266) ※1 | [HTTPリクエストを使用してスピードを測定](Arduino/THOUSANDIY-005/webClient)|[SPRESENSE用Wi-Fi add-onボード](https://www.switch-science.com/products/4042)<br/>[esp8266_at_command_examples](https://www.espressif.com/sites/default/files/documentation/4b-esp8266_at_command_examples_en.pdf)<br/>[esp8266_at_instruction_set](https://www.espressif.com/sites/default/files/documentation/4a-esp8266_at_instruction_set_en.pdf)|
-| [W5500-Ether for Spresense(W5500)](Arduino/W5500) |https://crane-elec.co.jp/wp/wp-content/uploads/2022/03/Ethernet-spi5.zip (クリックするとダウンロードします)  | [HTTPリクエストを使用してスピードを測定](Arduino/W5500/webClient) <br/>[UDPを送信](Arduino/W5500/udpTimeoutReset/)|[W5500-Ether (有線ネットワーク拡張ボード for Spresense)](https://crane-elec.co.jp/products/oem/vol-20/)|
-| [Wi-SUN(SPRESENSE-WiSUN-EVK-701)](Arduino/SPRESENSE-WiSUN-EVK-701) | [SPRESENSE-WISUN-EVK-701](https://github.com/RohmSemiconductor/Arduino/tree/master/SPRESENSE-WISUN-EVK-701) ※2 |[ピアツーピアによる通信](Arduino/SPRESENSE-WiSUN-EVK-701/communication_1v1) |[Wi-SUN Add-onボード「SPRESENSE-WiSUN-EVK-701」](https://www.rohm.co.jp/support/spresense-add-on-board)<br/>[BP35C0-J11 UART IF仕様書](https://fscdn.rohm.com/jp/products/databook/applinote/module/wireless/bp35c0-j11_uartif_specification_tr-j.pdf)<br/> |
-| [CAN(MCP2515T-E_ST)](Arduino/MCP2515T-E_ST) |[MCP_CAN_lib](https://github.com/TomonobuHayakawa/MCP_CAN_lib) ※1 | N/A |[Spresense 用 CAN AddOnボード](https://nextstep.official.ec/items/38434337) |
-| [eMMC(KLMAG1JETD-B041)](Arduino/KLMAG1JETD-B041) | N/A | [camera_apitest](Arduino/KLMAG1JETD-B041/camera_apitest)<br/>[nuttx_shell](Arduino/KLMAG1JETD-B041/nuttx_shell/)<br/>[player_playlist_hires](Arduino/KLMAG1JETD-B041/player_playlist_hires/)<br/>[recorder_wav_192k](Arduino/KLMAG1JETD-B041/recorder_wav_192k/)<br/>[UsbMsc](Arduino/KLMAG1JETD-B041/UsbMsc)<br/>[Zmodem](Arduino/KLMAG1JETD-B041/Zmodem) |[Spresense 用 eMMC(KLMAG1JETD-B041) AddOnボード](https://nextstep.official.ec/items/66602892) |
+| 加速度・ジャイロセンサー | [BMI270](Arduino/BMI270) | [BMI270-Sensor-API](https://github.com/TomonobuHayakawa/BMI270-Sensor-API) ※1|[3軸加速度や3軸ジャイロのデータを取得](Arduino/BMI270/BMI270) |
+| 超音波センサー | [MB7389-100](Arduino/MB7389-100) | N/A |[距離データの取得](Arduino/MB7389-100/mb7389) | 
+| HDRカメラ | [CXD5602PWBCAM2W](Arduino/CXD5602PWBCAM2W) | N/A | [画像を保存](Arduino/CXD5602PWBCAM2W/isx019)<br/> [FPSを測定](Arduino/CXD5602PWBCAM2W/cal_fps)|
+| ToFセンサー  | [MM-S50MV](Arduino/MM-S50MV)| [MM-S50MV](https://github.com/TomonobuHayakawa/MM-S50MV) ※2 |[1D、3Dの距離と照度データの取得](Arduino/MM-S50MV/measure) |
+| ELTRES | [CEBB-CXM1501GR-02](Arduino/CEBB-CXM1501GR-02)  | [こちら](https://www.cresco-dt.co.jp/service/iot/iot-poc/eltres/)へ登録が必要 |N/A|
+| WiFi | [iS110B(GS2200)](Arduino/iS110B) |[GS2200-WiFi](https://github.com/TomonobuHayakawa/GS2200-WiFi) ※1 | [HTTPリクエストを使用してスピードを測定](Arduino/iS110B/WebClient) | 
+| WiFi | [THOUSANDIY-005(ESP8266)](Arduino/THOUSANDIY-005) | [ITEADLIB_Arduino_WeeESP8266](https://github.com/kamtom480/ITEADLIB_Arduino_WeeESP8266) ※1 | [HTTPリクエストを使用してスピードを測定](Arduino/THOUSANDIY-005/webClient)| 
+| Ethernet | [W5500-Ether for Spresense(W5500)](Arduino/W5500)|https://crane-elec.co.jp/wp/wp-content/uploads/2022/03/Ethernet-spi5.zip <br/> (クリックするとダウンロードします)  | [HTTPリクエストを使用してスピードを測定](Arduino/W5500/webClient) <br/>[UDPを送信](Arduino/W5500/udpTimeoutReset/)|
+| Wi-SUN | [SPRESENSE-WiSUN-EVK-701](Arduino/SPRESENSE-WiSUN-EVK-701) | [SPRESENSE-WISUN-EVK-701](https://github.com/RohmSemiconductor/Arduino/tree/master/SPRESENSE-WISUN-EVK-701) ※2 |[ピアツーピアによる通信](Arduino/SPRESENSE-WiSUN-EVK-701/communication_1v1) |
+| CAN | [MCP2515T-E_ST](Arduino/MCP2515T-E_ST) |[MCP_CAN_lib](https://github.com/TomonobuHayakawa/MCP_CAN_lib) ※1 | N/A |
+| BLE | [BLE1507](Arduino/BLE1507)| N/A |[PeriheralからCentralへNotifyを送信](Arduino/BLE1507/peripheral_central) |
+| eMMC|[KLMAG1JETD-B041](Arduino/KLMAG1JETD-B041)   | N/A | [camera_apitest](Arduino/KLMAG1JETD-B041/camera_apitest)<br/>[nuttx_shell](Arduino/KLMAG1JETD-B041/nuttx_shell/)<br/>[player_playlist_hires](Arduino/KLMAG1JETD-B041/player_playlist_hires/)<br/>[recorder_wav_192k](Arduino/KLMAG1JETD-B041/recorder_wav_192k/)<br/>[UsbMsc](Arduino/KLMAG1JETD-B041/UsbMsc)<br/>[Zmodem](Arduino/KLMAG1JETD-B041/Zmodem) |
 
 ※1 リポジトリがLibrary Root Folderから始まるのでgithubから直接ZIPダウンロードできます。また、librariesディレクトリにgit cloneすることでライブラリのインストールが出来ます。<br/>
 ※2 ライブラリがサブディレクトリで提供されているのでgit cloneしてからリポジトリ内のサブディレクトリをLibrary Root Folderとなるようにフォルダ指定したりZIP圧縮したりするなどをしてインストールしてください。
+
+#### 3.3.2 マルチコア
+
+Spresense Arduinoでマルチコアを使用したサンプルプログラムです。
+
+|コア数|ライブラリ|サンプルプログラム|
+|----|----|----|
+|2|[BMI270-Sensor-API](https://github.com/TomonobuHayakawa/BMI270-Sensor-API)|[カメラ画像とBMI270のデータを取得](Arduino/MultiCoreSensor)|
+
 
 ### 3.4 生産終了・販売終了
 
@@ -119,11 +138,10 @@ Spresense SDKによる開発では[Visual Studio Code](https://code.visualstudio
 
 ### 4.2 参考情報
 
-|アドオンボード|ライブラリ|サンプルプログラム|資料|
+|アドオンボード|型番|ライブラリ|サンプルプログラム|
 |----|----|----|----|
-| [近接センサー(APDS-9930)](Arduino/APDS-9930) | N/A |  [照度](https://github.com/sonydevworld/spresense/tree/master/examples/light)<br/> [近接検出](https://github.com/sonydevworld/spresense/tree/master/examples/proximity)|[APDS-9930](https://jp.broadcom.com/products/optical-sensors/integrated-ambient-light-proximity-sensors/apds-9930)<br/>[datasheet](https://www.mouser.jp/datasheet/2/678/av02-3190en_ds_apds-9930_2015-11-13-1828481.pdf)
-| [ELTRES SPEXEL](https://device.risner.jp/products/detail/15) | [こちら](https://device.risner.jp/products/detail/15)より購入が必要 | N/A |[ELTRESについて](https://www.sony-semicon.com/ja/eltres/index.html)|
-
+|近接センサー | [APDS-9930](Arduino/APDS-9930) | N/A |  [照度](https://github.com/sonydevworld/spresense/tree/master/examples/light)<br/> [近接検出](https://github.com/sonydevworld/spresense/tree/master/examples/proximity)|
+| ELTRES | [ELTRES SPEXEL](https://device.risner.jp/products/detail/15) | [こちら](https://device.risner.jp/products/detail/37)より購入が必要 | N/A |
 
 ## 5.Spresenseに関するご質問について
 
@@ -143,12 +161,6 @@ Spresenseについてわからない点ある時には、まずは[公式ドキ�
 
 - [ハードウエア設計情報](https://github.com/sonydevworld/spresense-hw-design-files)
 - [Spresenseメインボード3次元データ](https://github.com/sonydevworld/spresense-hw-design-files/tree/master/CXD5602PWBMAIN1/stp)
-
-## 7.変更履歴
-
-|日付|変更点 |
-|----|----|
-|2023/05/16|初版|
 
 ## リンク/再配布について
 本サイトが提供するコンテンツのリンクはフリーですが、改変しての再配布は禁止いたします。

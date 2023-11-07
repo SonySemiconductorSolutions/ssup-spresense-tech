@@ -11,3 +11,4 @@
 
 ## サンプルプログラム
 - [UDPを送信](udpTimeoutReset/)
+- [HTTPリクエストを使用してスピードを測定](https://github.com/SonySemiconductorSolutions/ssup-spresense-internal/tree/main/Arduino/W5500/webClient)
