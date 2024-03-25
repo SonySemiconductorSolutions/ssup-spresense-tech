@@ -73,7 +73,6 @@ Spresense Arudinoで使用できるセンサーや通信アドオンボードを
 
 |アドオンボード|型番|ライブラリ|サンプルプログラム|
 |----|----|----|----|
-| 加速度・ジャイロセンサー | [BMI270](Arduino/BMI270) | [BMI270-Sensor-API](https://github.com/TomonobuHayakawa/BMI270-Sensor-API) ※1|[3軸加速度や3軸ジャイロのデータを取得](Arduino/BMI270/BMI270) |
 | 超音波センサー | [MB7389-100](Arduino/MB7389-100) | N/A |[距離データの取得](Arduino/MB7389-100/mb7389) | 
 | HDRカメラ | [CXD5602PWBCAM2W](Arduino/CXD5602PWBCAM2W) | N/A | [画像を保存](Arduino/CXD5602PWBCAM2W/isx019)<br/> [FPSを測定](Arduino/CXD5602PWBCAM2W/cal_fps)|
 | ToFセンサー  | [MM-S50MV](Arduino/MM-S50MV)| [MM-S50MV](https://github.com/TomonobuHayakawa/MM-S50MV) ※2 |[1D、3Dの距離と照度データの取得](Arduino/MM-S50MV/measure) |
@@ -82,9 +81,7 @@ Spresense Arudinoで使用できるセンサーや通信アドオンボードを
 | WiFi | [THOUSANDIY-005(ESP8266)](Arduino/THOUSANDIY-005) | [ITEADLIB_Arduino_WeeESP8266](https://github.com/kamtom480/ITEADLIB_Arduino_WeeESP8266) ※1 | [HTTPリクエストを使用してスピードを測定](Arduino/THOUSANDIY-005/webClient)| 
 | Ethernet | [W5500-Ether for Spresense(W5500)](Arduino/W5500)|https://crane-elec.co.jp/wp/wp-content/uploads/2022/03/Ethernet-spi5.zip <br/> (クリックするとダウンロードします)  | [HTTPリクエストを使用してスピードを測定](Arduino/W5500/webClient) <br/>[UDPを送信](Arduino/W5500/udpTimeoutReset/)|
 | Wi-SUN | [SPRESENSE-WiSUN-EVK-701](Arduino/SPRESENSE-WiSUN-EVK-701) | [SPRESENSE-WISUN-EVK-701](https://github.com/RohmSemiconductor/Arduino/tree/master/SPRESENSE-WISUN-EVK-701) ※2 |[ピアツーピアによる通信](Arduino/SPRESENSE-WiSUN-EVK-701/communication_1v1) |
-| CAN | [MCP2515T-E_ST](Arduino/MCP2515T-E_ST) |[MCP_CAN_lib](https://github.com/TomonobuHayakawa/MCP_CAN_lib) ※1 | N/A |
 | BLE | [BLE1507](Arduino/BLE1507)| N/A |[PeriheralからCentralへNotifyを送信](Arduino/BLE1507/peripheral_central) |
-| eMMC|[KLMAG1JETD-B041](Arduino/KLMAG1JETD-B041)   | N/A | [camera_apitest](Arduino/KLMAG1JETD-B041/camera_apitest)<br/>[nuttx_shell](Arduino/KLMAG1JETD-B041/nuttx_shell/)<br/>[player_playlist_hires](Arduino/KLMAG1JETD-B041/player_playlist_hires/)<br/>[recorder_wav_192k](Arduino/KLMAG1JETD-B041/recorder_wav_192k/)<br/>[UsbMsc](Arduino/KLMAG1JETD-B041/UsbMsc)<br/>[Zmodem](Arduino/KLMAG1JETD-B041/Zmodem) |
 
 ※1 リポジトリがLibrary Root Folderから始まるのでgithubから直接ZIPダウンロードできます。また、librariesディレクトリにgit cloneすることでライブラリのインストールが出来ます。<br/>
 ※2 ライブラリがサブディレクトリで提供されているのでgit cloneしてからリポジトリ内のサブディレクトリをLibrary Root Folderとなるようにフォルダ指定したりZIP圧縮したりするなどをしてインストールしてください。
@@ -98,16 +95,19 @@ Spresense Arduinoでマルチコアを使用したサンプルプログラムで
 |2|[BMI270-Sensor-API](https://github.com/TomonobuHayakawa/BMI270-Sensor-API)|[カメラ画像とBMI270のデータを取得](Arduino/MultiCoreSensor)|
 
 
-### 3.4 生産終了・販売終了
+### 3.4 生産終了・販売終了・入手困難
 
-生産終了・販売終了になっているセンサーやアドオンボードです。
+生産終了・販売終了・入手困難になっているセンサーやアドオンボードです。
 
 |アドオンボード|ライブラリ|サンプルプログラム|資料|
 |----|----|----|----|
-| [加速度・ジャイロセンサー(BMI160)](Arduino/BMI160)<br/>販売終了 | [BMI160-Arduino](https://github.com/kzhioki/BMI160-Arduino) ※1| [加速度やジャイロデータの取得](Arduino/BMI160/BMI160) | [Datasheet](https://www.bosch-sensortec.com/media/boschsensortec/downloads/datasheets/bst-bmi160-ds000.pdf)<br/> [回路図](https://docid81hrs3j1.cloudfront.net/medialibrary/2019/03/SPRESENSE_BMI160_BMP280.pdf)|
-| [環境センサー(BMP280/BME280)](Arduino/BME280)<br/>販売終了 | [SSCI_BME280](https://github.com/SWITCHSCIENCE/samplecodes/tree/master/BME280/Arduino/libraries/SSCI_BME280) ※2 |[温度や湿度データの取得](Arduino/BME280/BMP280) |[BMP280 Datasheet](https://www.bosch-sensortec.com/media/boschsensortec/downloads/datasheets/bst-bmp280-ds001.pdf)<br/>[BMP280 回路図](https://docid81hrs3j1.cloudfront.net/medialibrary/2019/03/SPRESENSE_BMI160_BMP280.pdf)<br/>[BME280 Datasheet](https://www.bosch-sensortec.com/media/boschsensortec/downloads/datasheets/bst-bme280-ds002.pdf)<br/>[BME280 回路図](https://docid81hrs3j1.cloudfront.net/medialibrary/2019/01/SPRESENSE_BME280.pdf)<br/>[BME280 Documents](https://www.bosch-sensortec.com/products/environmental-sensors/humidity-sensors-bme280/#documents) |
-| [CO2センサー(SCD41)](Arduino/SCD41)<br/>販売終了 |[Sensirion Arduino Core Library](https://github.com/Sensirion/arduino-core) ※1 <br/> [Sensirion I2C SCD4x Arduino Library](https://github.com/Sensirion/arduino-i2c-scd4x) ※1 |N/A|N/A|
+| [加速度・ジャイロセンサー(BMI160)](Arduino/BMI160) | [BMI160-Arduino](https://github.com/kzhioki/BMI160-Arduino) ※1| [加速度やジャイロデータの取得](Arduino/BMI160/BMI160) | [Datasheet](https://www.bosch-sensortec.com/media/boschsensortec/downloads/datasheets/bst-bmi160-ds000.pdf)<br/> [回路図](https://docid81hrs3j1.cloudfront.net/medialibrary/2019/03/SPRESENSE_BMI160_BMP280.pdf)|
+| [加速度・ジャイロセンサー(BMI270)](Arduino/BMI270) | [BMI270-Sensor-API](https://github.com/TomonobuHayakawa/BMI270-Sensor-API) ※1|[3軸加速度や3軸ジャイロのデータを取得](Arduino/BMI270/BMI270) | |
+| [環境センサー(BMP280/BME280)](Arduino/BME280) | [SSCI_BME280](https://github.com/SWITCHSCIENCE/samplecodes/tree/master/BME280/Arduino/libraries/SSCI_BME280) ※2 |[温度や湿度データの取得](Arduino/BME280/BMP280) |[BMP280 Datasheet](https://www.bosch-sensortec.com/media/boschsensortec/downloads/datasheets/bst-bmp280-ds001.pdf)<br/>[BMP280 回路図](https://docid81hrs3j1.cloudfront.net/medialibrary/2019/03/SPRESENSE_BMI160_BMP280.pdf)<br/>[BME280 Datasheet](https://www.bosch-sensortec.com/media/boschsensortec/downloads/datasheets/bst-bme280-ds002.pdf)<br/>[BME280 回路図](https://docid81hrs3j1.cloudfront.net/medialibrary/2019/01/SPRESENSE_BME280.pdf)<br/>[BME280 Documents](https://www.bosch-sensortec.com/products/environmental-sensors/humidity-sensors-bme280/#documents) |
+| [CO2センサー(SCD41)](Arduino/SCD41) |[Sensirion Arduino Core Library](https://github.com/Sensirion/arduino-core) ※1 <br/> [Sensirion I2C SCD4x Arduino Library](https://github.com/Sensirion/arduino-i2c-scd4x) ※1 |N/A|N/A|
 | [地磁気センサー(BMI1422AGMV)](Arduino/BMI1422AGMV)<br/>SPRESENSE-SENSOR-EVK-701 生産終了|[BMI1422AGMV](https://github.com/RohmSemiconductor/Arduino/tree/master/BM1422AGMV) ※2 | N/A |[Datasheet](https://fscdn.rohm.com/jp/products/databook/datasheet/ic/sensor/geomagnetic/bm1422agmv-j.pdf)|
+| [eMMC(KLMAG1JETD-B041)](Arduino/KLMAG1JETD-B041)   | N/A | [camera_apitest](Arduino/KLMAG1JETD-B041/camera_apitest)<br/>[nuttx_shell](Arduino/KLMAG1JETD-B041/nuttx_shell/)<br/>[player_playlist_hires](Arduino/KLMAG1JETD-B041/player_playlist_hires/)<br/>[recorder_wav_192k](Arduino/KLMAG1JETD-B041/recorder_wav_192k/)<br/>[UsbMsc](Arduino/KLMAG1JETD-B041/UsbMsc)<br/>[Zmodem](Arduino/KLMAG1JETD-B041/Zmodem) | |
+| [CAN(MCP2515T-E_ST)](Arduino/MCP2515T-E_ST) |[MCP_CAN_lib](https://github.com/TomonobuHayakawa/MCP_CAN_lib) ※1 | N/A | |
 
 ※1 リポジトリがLibrary Root Folderから始まるのでgithubから直接ZIPダウンロードできます。また、librariesディレクトリにgit cloneすることでライブラリのインストールが出来ます。<br/>
 ※2 ライブラリがサブディレクトリで提供されているのでgit cloneしてからリポジトリ内のサブディレクトリをLibrary Root Folderとなるようにフォルダ指定したりZIP圧縮したりするなどをしてインストールしてください。

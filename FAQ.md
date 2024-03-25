@@ -324,3 +324,23 @@ SPIについては、メインボードおよび拡張ボードのどちらもTx
 いろいろな方法がありますが、Google Admin Toolboxが提供しているサービスを使用するとWebブラウザからOS非依存で調べることができます。
 
 - [Dig (DNSルックアップ)](https://toolbox.googleapps.com/apps/dig/)
+
+## Spresenseで利用可能な数値計算ライブラリ
+
+Arduino向けにEigenArudinoというmatrix/vectorライブラリがあります。
+
+- [EigenArduino](https://github.com/vancegroup/EigenArduino)
+
+以下をダウンロードしてArduino IDEでインストールして試してみてください。
+
+- [https://github.com/vancegroup/EigenArduino/archive/refs/heads/Eigen30.zip](https://github.com/vancegroup/EigenArduino/archive/refs/heads/Eigen30.zip)
+
+## DCモータの駆動方法
+
+SpresenseのデジタルI/O(D00～D15)ですが電圧は5Vになりますが、電流が6mA程度となり、DCモータを直接接続して回すには電流が足りません。
+
+- [SpresenseとArduino UNOの違い](https://developer.sony.com/ja/spresense/development-guides/hw_docs_ja.html#_spresense_%E3%81%A8_arduino_uno_%E3%81%AE%E9%81%95%E3%81%84)
+
+モータドライバを使用して動作させている例がありますので、こちらをご参考にして頂ければと思います。
+
+- [SPRESENSE メインボードでDCモータを動かしてみた！](https://makers-with-myson.blog.ss-blog.jp/2020-03-08)
