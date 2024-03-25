@@ -166,5 +166,5 @@ Spresenseについてわからない点ある時には、まずは[公式ドキ�
 本サイトが提供するコンテンツのリンクはフリーですが、改変しての再配布は禁止いたします。
 
 ## Copyright
-Copyright 2023 Sony Semiconductor Solutions Corporation
+Copyright 2023-2024 Sony Semiconductor Solutions Corporation
 
