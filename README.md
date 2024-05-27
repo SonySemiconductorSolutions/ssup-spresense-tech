@@ -76,7 +76,6 @@ Spresense Arudinoで使用できるセンサーや通信アドオンボードを
 | 超音波センサー | [MB7389-100](Arduino/MB7389-100) | N/A |[距離データの取得](Arduino/MB7389-100/mb7389) | 
 | HDRカメラ | [CXD5602PWBCAM2W](Arduino/CXD5602PWBCAM2W) | N/A | [画像を保存](Arduino/CXD5602PWBCAM2W/isx019)<br/> [FPSを測定](Arduino/CXD5602PWBCAM2W/cal_fps)|
 | ToFセンサー  | [MM-S50MV](Arduino/MM-S50MV)| [MM-S50MV](https://github.com/TomonobuHayakawa/MM-S50MV) ※2 |[1D、3Dの距離と照度データの取得](Arduino/MM-S50MV/measure) |
-| ELTRES | [CEBB-CXM1501GR-02](Arduino/CEBB-CXM1501GR-02)  | [こちら](https://www.cresco-dt.co.jp/service/iot/iot-poc/eltres/)へ登録が必要 |N/A|
 | WiFi | [iS110B(GS2200)](Arduino/iS110B) |[GS2200-WiFi](https://github.com/TomonobuHayakawa/GS2200-WiFi) ※1 | [HTTPリクエストを使用してスピードを測定](Arduino/iS110B/WebClient) | 
 | WiFi | [THOUSANDIY-005(ESP8266)](Arduino/THOUSANDIY-005) | [ITEADLIB_Arduino_WeeESP8266](https://github.com/kamtom480/ITEADLIB_Arduino_WeeESP8266) ※1 | [HTTPリクエストを使用してスピードを測定](Arduino/THOUSANDIY-005/webClient)| 
 | Ethernet | [W5500-Ether for Spresense(W5500)](Arduino/W5500)|https://crane-elec.co.jp/wp/wp-content/uploads/2022/03/Ethernet-spi5.zip <br/> (クリックするとダウンロードします)  | [HTTPリクエストを使用してスピードを測定](Arduino/W5500/webClient) <br/>[UDPを送信](Arduino/W5500/udpTimeoutReset/)|
